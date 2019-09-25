@@ -51,6 +51,7 @@ class GUILaunch {
         topBar.getChildren().add(title);
         
         rootPane.setTop(topBar);
+        rootPane.setLeft(createLeftBar());
         
         //set with the scene
         scene = new Scene(rootPane,900,700);
@@ -59,10 +60,10 @@ class GUILaunch {
     }
     
     private VBox createLeftBar(){
-        
         VBox leftBar = new VBox(5);
         Text ipText = new Text("This is your IP : ");
         leftBar.setAlignment(Pos.CENTER);
+        leftBar.getChildren().add(ipText);
         return leftBar;
     }
     
