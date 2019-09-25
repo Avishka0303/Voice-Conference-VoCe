@@ -28,9 +28,6 @@ public class VoiceConference extends Application {
         stage.show();
     }
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         guiLaunch = new GUILaunch();
         launch(args);
