@@ -5,24 +5,30 @@
  */
 package voiceconference;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-/**
- *
- * @author Predator X21
- */
+
 class GUILaunch {
     
     private Text title;
+    private TextField connectToIP;
+    private RadioButton receiverRadio;
+    private RadioButton senderRadio;
+    private Button callBtn;
     private Scene scene;
     
     public GUILaunch(){
@@ -40,6 +46,7 @@ class GUILaunch {
     private void createGUI() {
         
         BorderPane rootPane = new BorderPane();
+        rootPane.setPadding(new Insets(15, 15, 15, 15));
         
         //create the titlebar 
         title = new Text("VoCe - Voice Conference");
@@ -52,6 +59,7 @@ class GUILaunch {
         
         rootPane.setTop(topBar);
         rootPane.setLeft(createLeftBar());
+        rootPane.setStyle("-fx-background-color: darkmagenta;");
         
         //set with the scene
         scene = new Scene(rootPane,900,700);
@@ -60,13 +68,52 @@ class GUILaunch {
     }
     
     private VBox createLeftBar(){
+        
         VBox leftBar = new VBox(5);
-        Text ipText = new Text("This is your IP : ");
-        leftBar.setAlignment(Pos.CENTER);
-        leftBar.getChildren().add(ipText);
-        return leftBar;
+        leftBar.setPadding(new Insets(15, 15, 15, 15));
+        leftBar.setSpacing(5);
+        
+        Label ipLabel = new Label("This is your IP : ");
+        ipLabel.setFont(Font.font(null,FontWeight.BOLD,20));
+        ipLabel.setTextFill(Color.WHITE);
+        
+        connectToIP = new TextField();
+        connectToIP.setPromptText("Enter reciever ip");
+        connectToIP.setFont(Font.font(null,FontWeight.MEDIUM,20));
+        
+        HBox chooseBox = new HBox();
+        chooseBox.setSpacing(15);
+        chooseBox.setPadding(new Insets(15, 15, 15, 0));
+        
+        ToggleGroup chooseToggle = new ToggleGroup();
+        
+        receiverRadio =new RadioButton("Receiver");
+        receiverRadio.setFont(Font.font(null,FontWeight.MEDIUM,20));
+        receiverRadio.setTextFill(Color.WHITE);
+        receiverRadio.setSelected(true);
+        receiverRadio.setToggleGroup(chooseToggle);
+        
+        senderRadio = new RadioButton("Sender");
+        senderRadio.setToggleGroup(chooseToggle);
+        senderRadio.setFont(Font.font(null,FontWeight.MEDIUM,20));
+        senderRadio.setTextFill(Color.WHITE);
+        
+        callBtn = new Button("Connect");
+        callBtn.setFont(Font.font(null,FontWeight.MEDIUM,20));
+        callBtn.setTextFill(Color.WHITE);
+        callBtn.setStyle("-fx-background-color: green;");
+        
+        chooseBox.getChildren().addAll(receiverRadio,senderRadio);
+       
+        leftBar.setAlignment(Pos.CENTER_RIGHT);
+        leftBar.getChildren().addAll(ipLabel,connectToIP,chooseBox,callBtn);
+     
+        return leftBar; 
     }
-    
-    
-    
+
+    void startEngine() {
+        callBtn.setOnAction(ActionEvent->{
+            
+        });
+    }
 }
