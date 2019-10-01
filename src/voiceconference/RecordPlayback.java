@@ -1,6 +1,5 @@
 package voiceconference;
 
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import javax.sound.sampled.AudioFormat;
@@ -22,13 +21,10 @@ public class RecordPlayback {
     TargetDataLine targetDataLine;
     AudioInputStream audioInputStream;
     SourceDataLine sourceDataLine;
-    byte tempBuffer[] = new byte[500];
-
-    public static void main(String[] args) {
-
-        RecordPlayback playback = new RecordPlayback();
-        playback.captureAudio();
-
+    byte tempBuffer[] = new byte[ProgramData.PACKET_SIZE];
+    
+    public RecordPlayback(){
+        readyAudioSystem();
     }
 
     private AudioFormat getAudioFormat() {
@@ -40,9 +36,7 @@ public class RecordPlayback {
         return new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
     }
 
-
-
-    private void captureAudio() {
+    private void readyAudioSystem() {
 
         try {
             Mixer.Info[] mixerInfo = AudioSystem.getMixerInfo();    //get available mixers
@@ -75,31 +69,40 @@ public class RecordPlayback {
             FloatControl control = (FloatControl)sourceDataLine.getControl(FloatControl.Type.MASTER_GAIN);
             control.setValue(control.getMaximum());
 
-            captureAndPlay(); //playing the audio
-
         } catch (LineUnavailableException e) {
             System.out.println(e);
             System.exit(0);
         }
-
     }
 
-    private void captureAndPlay() {
+    public void captureVoice(UDPClient client) {
         byteArrayOutputStream = new ByteArrayOutputStream();
-        stopCapture = false;
-        try {
-            int readCount;
-            while (!stopCapture) {
-                readCount = targetDataLine.read(tempBuffer, 0, tempBuffer.length);  //capture sound into tempBuffer
-                if (readCount > 0) {
-                    byteArrayOutputStream.write(tempBuffer, 0, readCount);
-                    sourceDataLine.write(tempBuffer, 0, 500);   //playing audio available in tempBuffer
+        Thread recordingThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Mic is online now.....");
+                stopCapture = false;
+                try {
+                    int readCount;
+                    while (!stopCapture) {
+                        readCount = targetDataLine.read(tempBuffer, 0, tempBuffer.length);  //capture sound into tempBuffer
+                        if (readCount > 0) {
+                            byteArrayOutputStream.write(tempBuffer, 0, readCount);
+                            client.UDPSendPacket(tempBuffer);
+                            //sourceDataLine.write(tempBuffer, 0, 500);   //playing audio available in tempBuffer
+                        }
+                    }
+                    byteArrayOutputStream.close();
+                } catch (IOException e) {
+                    System.out.println(e);
+                    System.exit(0);
                 }
             }
-            byteArrayOutputStream.close();
-        } catch (IOException e) {
-            System.out.println(e);
-            System.exit(0);
-        }
+        });
+        recordingThread.start();
+    }
+    
+    private void playVoice(byte voiceData[]){
+        sourceDataLine.write(tempBuffer, 0, ProgramData.PACKET_SIZE);
     }
 }

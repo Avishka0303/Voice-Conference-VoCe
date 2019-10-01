@@ -12,11 +12,11 @@ public class UDPServer {
     
     public UDPServer(){
         try {
-            buffer = new byte[Data.PACKET_SIZE];
+            buffer = new byte[ProgramData.PACKET_SIZE];
             //construct the socket.
-            datagramSocket = new DatagramSocket(Data.PORT_NUMBER);
+            datagramSocket = new DatagramSocket(ProgramData.PORT_NUMBER);
             //create the datagram packet
-            datagramPacket = new DatagramPacket(new byte[Data.PACKET_SIZE], Data.PACKET_SIZE);
+            datagramPacket = new DatagramPacket(new byte[ProgramData.PACKET_SIZE], ProgramData.PACKET_SIZE);
         } catch (SocketException ex) {
             System.out.println("Socket is used by another program.");
         }
@@ -26,12 +26,12 @@ public class UDPServer {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
+                System.out.println("Your server is online");
                 while(true){
                     try{
                         datagramSocket.receive(datagramPacket);
-                        System.out.println("IP address : "+datagramPacket.getAddress()+" ");
+                        System.out.println("Call from IP address : "+datagramPacket.getAddress()+" ");
                         datagramPacket.setData(buffer);
-                        
                         //give to the record playback.
                     }catch(Exception e){
                         System.out.println("Error in reception check for that.");

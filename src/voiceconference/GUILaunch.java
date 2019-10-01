@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package voiceconference;
 
 import javafx.geometry.Insets;
@@ -22,6 +17,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 
+
 class GUILaunch {
     
     private Text title;
@@ -31,16 +27,18 @@ class GUILaunch {
     private Button callBtn;
     private Scene scene;
     
+    private String hostIP;
+    
+    private static UDPClient client;
+    private UDPServer server;
+    private RecordPlayback audioService;
+    
     public GUILaunch(){
         createGUI();
     }
     
     public Scene getScene(){
         return scene;
-    }
-
-    void startConversation() {
-        
     }
 
     private void createGUI() {
@@ -62,7 +60,7 @@ class GUILaunch {
         rootPane.setStyle("-fx-background-color: darkmagenta;");
         
         //set with the scene
-        scene = new Scene(rootPane,900,700);
+        scene = new Scene(rootPane,600,500);
         scene.setFill(Color.DARKMAGENTA);
         
     }
@@ -73,7 +71,7 @@ class GUILaunch {
         leftBar.setPadding(new Insets(15, 15, 15, 15));
         leftBar.setSpacing(5);
         
-        Label ipLabel = new Label("This is your IP : ");
+        Label ipLabel = new Label("Enter IP of host : ");
         ipLabel.setFont(Font.font(null,FontWeight.BOLD,20));
         ipLabel.setTextFill(Color.WHITE);
         
@@ -105,15 +103,34 @@ class GUILaunch {
         
         chooseBox.getChildren().addAll(receiverRadio,senderRadio);
        
-        leftBar.setAlignment(Pos.CENTER_RIGHT);
+        leftBar.setAlignment(Pos.CENTER_LEFT);
         leftBar.getChildren().addAll(ipLabel,connectToIP,chooseBox,callBtn);
      
         return leftBar; 
     }
 
-    void startEngine() {
+    void startService() {
         callBtn.setOnAction(ActionEvent->{
-            
+            if( isValidIP() && client==null ){
+                client = new UDPClient(hostIP);
+                audioService.captureVoice(client);
+            }else{
+                System.out.println("IP is not valid . Enter a new IP");
+            }
         });
+    }
+    
+    public void startServer(){
+        server = new UDPServer();
+        server.receptionHandler();
+        audioService = new RecordPlayback();
+    }
+
+    private boolean isValidIP() {
+        hostIP = connectToIP.getText();
+        if(hostIP.equals(""))
+            return false;
+        else
+            return true;
     }
 }
