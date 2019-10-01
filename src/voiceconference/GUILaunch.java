@@ -122,8 +122,8 @@ class GUILaunch {
     
     public void startServer(){
         server = new UDPServer();
-        server.receptionHandler();
         audioService = new RecordPlayback();
+        server.receptionHandler(audioService);
     }
 
     private boolean isValidIP() {

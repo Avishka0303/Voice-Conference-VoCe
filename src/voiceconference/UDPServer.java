@@ -22,8 +22,8 @@ public class UDPServer {
         }
     }
     
-    public void receptionHandler(){
-        Thread t = new Thread(new Runnable() {
+    public void receptionHandler(RecordPlayback audioService){
+        Thread t = new Thread( new Runnable() {
             @Override
             public void run() {
                 System.out.println("Your server is online");
@@ -32,6 +32,7 @@ public class UDPServer {
                         datagramSocket.receive(datagramPacket);
                         System.out.println("Call from IP address : "+datagramPacket.getAddress()+" ");
                         datagramPacket.setData(buffer);
+                        audioService.playVoice(buffer);
                         //give to the record playback.
                     }catch(Exception e){
                         System.out.println("Error in reception check for that.");
