@@ -6,13 +6,12 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class UDPClient {
     
     private InetAddress hostAddress;
     private DatagramSocket udpSocket;
+    private int packetSequence;
     
     public UDPClient(String peerIPAddress){
         try {
@@ -26,12 +25,12 @@ public class UDPClient {
     }
     
     public void UDPSendPacket(byte[] data){
-        DatagramPacket dataPacket = new DatagramPacket(data,data.length,hostAddress,Data.PORT_NUMBER);
+        DataPacket packet = new DataPacket(packetSequence++,data);
+        DatagramPacket dataPacket = new DatagramPacket(data,data.length,hostAddress,ProgramData.PORT_NUMBER);
         try{
             udpSocket.send(dataPacket);
         }catch(IOException ex){
             System.out.println("Error in packet sending protocol.");
         }
     }
-    
 }
