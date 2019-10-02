@@ -111,7 +111,7 @@ class GUILaunch {
 
     void startService() {
         callBtn.setOnAction(ActionEvent->{
-            if( isValidIP() && client==null ){
+            if( isValidIP()){
                 client = new UDPClient(hostIP);
                 audioService.captureVoice(client);
             }else{
