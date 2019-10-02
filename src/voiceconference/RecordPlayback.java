@@ -103,6 +103,6 @@ public class RecordPlayback {
     }
     
     public void playVoice(byte voiceData[]){
-        sourceDataLine.write(tempBuffer, 0, ProgramData.PACKET_SIZE);
+        sourceDataLine.write(voiceData, 0, ProgramData.PACKET_SIZE);
     }
 }
