@@ -88,13 +88,13 @@ class GUILaunch {
         
         ToggleGroup chooseToggle = new ToggleGroup();
         
-        receiverRadio =new RadioButton("Receiver");
+        receiverRadio =new RadioButton("2 peers");
         receiverRadio.setFont(Font.font(null,FontWeight.MEDIUM,20));
         receiverRadio.setTextFill(Color.WHITE);
         receiverRadio.setSelected(true);
         receiverRadio.setToggleGroup(chooseToggle);
         
-        senderRadio = new RadioButton("Sender");
+        senderRadio = new RadioButton("Multicast");
         senderRadio.setToggleGroup(chooseToggle);
         senderRadio.setFont(Font.font(null,FontWeight.MEDIUM,20));
         senderRadio.setTextFill(Color.WHITE);
@@ -122,7 +122,7 @@ class GUILaunch {
         buttonBox.getChildren().addAll(callBtn,acceptBtn);
         
         leftBar.setAlignment(Pos.CENTER_LEFT);
-        leftBar.getChildren().addAll(ipLabel,connectToIP,chooseBox,incomingIP,buttonBox);
+        leftBar.getChildren().addAll(chooseBox,ipLabel,connectToIP,incomingIP,buttonBox);
      
         return leftBar; 
     }
@@ -142,12 +142,13 @@ class GUILaunch {
             client = new UDPClient(hostIP);
             audioService.captureVoice(client);
         });
+        
     }
     
     public void startServer(){
-        server = new UDPServer();
         audioService = new RecordPlayback();
-        server.receptionHandler(audioService);
+        server = new UDPServer(audioService);
+        server.start();
     }
     
     public boolean isValidIP() {
@@ -162,4 +163,5 @@ class GUILaunch {
         incomingIP.setText("Incoming call from IP : "+ipaddress);
         hostIP=ipaddress;
     }
+    
 }
