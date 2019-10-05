@@ -24,18 +24,21 @@ public class UDPServer {
     }
     
     public void receptionHandler(RecordPlayback audioService){
-        System.out.println("Your server is online");
-        try {
-            datagramSocket.receive(datagramPacket);
-            VoiceConference.guiLaunch.informIncoming(datagramPacket.getAddress().toString());
-            System.out.println("Yeah i am here");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        
         Thread t = new Thread( new Runnable() {
             @Override
             public void run() {
+                
+                System.out.println("Your server is online");
+                try {
+                    datagramSocket.receive(datagramPacket);
+                    VoiceConference.guiLaunch.informIncoming(datagramPacket.getAddress().toString());
+                    System.out.println("Yeah i am here");
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
                 while(!GUILaunch.isAccept);
+                
                 while(true){
                     try{
                         datagramSocket.receive(datagramPacket);    
@@ -46,6 +49,7 @@ public class UDPServer {
                         System.out.println("Error in reception check for that.");
                     }
                 }
+                
             }
         });
         t.start();
