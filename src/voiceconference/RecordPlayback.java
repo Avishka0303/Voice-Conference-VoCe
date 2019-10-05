@@ -89,7 +89,7 @@ public class RecordPlayback {
                         if (readCount > 0) {
                             byteArrayOutputStream.write(tempBuffer, 0, readCount);
                             client.UDPSendPacket(tempBuffer);
-                            //sourceDataLine.write(tempBuffer, 0, 500);   //playing audio available in tempBuffer
+                            //sourceDataLine.write( tempBuffer, 0, 500 );   //playing audio available in tempBuffer
                         }
                     }
                     byteArrayOutputStream.close();

@@ -31,6 +31,7 @@ public class UDPServer {
                 try {
                     datagramSocket.receive(datagramPacket);
                     VoiceConference.guiLaunch.informIncoming(datagramPacket.getAddress().toString());
+                    System.out.println("Yeah i am here");
                     while(!GUILaunch.isAccept);
                 } catch (IOException ex) {
                     ex.printStackTrace();
