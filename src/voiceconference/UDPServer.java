@@ -32,7 +32,7 @@ public class UDPServer {
                 System.out.println("Your server is online");
                 try {
                     datagramSocket.receive(datagramPacket);
-                    VoiceConference.guiLaunch.informIncoming(datagramPacket.getAddress().toString());
+                    GUILaunch.informIncoming(datagramPacket.getAddress().toString());
                     System.out.println("Yeah i am here");
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -49,7 +49,6 @@ public class UDPServer {
                         System.out.println("Error in reception check for that.");
                     }
                 }
-                
             }
         });
         t.start();

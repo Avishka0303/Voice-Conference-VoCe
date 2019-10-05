@@ -22,14 +22,14 @@ class GUILaunch {
     
     private Text title;
     private TextField connectToIP;
-    private Label incomingIP;
+    private static Label incomingIP;
     private RadioButton receiverRadio;
     private RadioButton senderRadio;
-    private Button callBtn;
-    private Button acceptBtn;
+    private static Button callBtn;
+    private static Button acceptBtn;
     private Scene scene;
     
-    private String hostIP;
+    private static String hostIP;
     public static boolean isAccept=false;
     
     private static UDPClient client;
@@ -156,7 +156,7 @@ class GUILaunch {
         return hostIP.matches(PATTERN);
     }
     
-    public void informIncoming(String ipaddress){
+    public static void informIncoming(String ipaddress){
         acceptBtn.setVisible(true);
         callBtn.setVisible(false);
         incomingIP.setText("Incoming call from IP : "+ipaddress);
