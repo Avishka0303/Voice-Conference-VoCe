@@ -29,13 +29,13 @@ public class UDPServer {
             datagramSocket.receive(datagramPacket);
             VoiceConference.guiLaunch.informIncoming(datagramPacket.getAddress().toString());
             System.out.println("Yeah i am here");
-            while(!GUILaunch.isAccept);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
         Thread t = new Thread( new Runnable() {
             @Override
             public void run() {
+                while(!GUILaunch.isAccept);
                 while(true){
                     try{
                         datagramSocket.receive(datagramPacket);    
