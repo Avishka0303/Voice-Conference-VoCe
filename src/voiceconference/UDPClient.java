@@ -1,6 +1,9 @@
 package voiceconference;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -17,20 +20,31 @@ public class UDPClient {
         try {
             this.hostAddress = InetAddress.getByName(peerIPAddress);
             this.udpSocket   = new DatagramSocket();
-        } catch (UnknownHostException ex) {
+        }catch (UnknownHostException ex) {
             System.out.println("This host is unknown.");
         }catch(SocketException ex1){
             System.out.println("This socket is busy");
         }
     }
     
-    public void UDPSendPacket(byte[] data){
+    public void UDPSendPacket(byte[] data) throws IOException{
+        
         DataPacket packet = new DataPacket(packetSequence++,data);
-        DatagramPacket dataPacket = new DatagramPacket(data,data.length,hostAddress,ProgramData.PORT_NUMBER);
+        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+        ObjectOutput outputObject = null;
+        
+        outputObject = new ObjectOutputStream(byteOutput);
+        outputObject.writeObject(packet);
+        outputObject.flush();
+        
+        byte[] objectData = byteOutput.toByteArray();
+        
+        DatagramPacket dataPacket = new DatagramPacket(objectData , objectData.length , hostAddress,ProgramData.PORT_NUMBER);
         try{
             udpSocket.send(dataPacket);
         }catch(IOException ex){
             System.out.println("Error in packet sending protocol.");
         }
+        
     }
 }
