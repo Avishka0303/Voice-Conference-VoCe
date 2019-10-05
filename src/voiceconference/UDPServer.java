@@ -1,5 +1,6 @@
 package voiceconference;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
@@ -27,13 +28,19 @@ public class UDPServer {
             @Override
             public void run() {
                 System.out.println("Your server is online");
+                try {
+                    datagramSocket.receive(datagramPacket);
+                    VoiceConference.guiLaunch.informIncoming(datagramPacket.getAddress().toString());
+                    while(!GUILaunch.isAccept);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
                 while(true){
                     try{
-                        datagramSocket.receive(datagramPacket);
+                        datagramSocket.receive(datagramPacket);    
                         System.out.println("Call from IP address : "+datagramPacket.getAddress()+" ");
                         datagramPacket.setData(buffer);
                         audioService.playVoice(buffer);
-                        //give to the record playback.
                     }catch(Exception e){
                         System.out.println("Error in reception check for that.");
                     }

@@ -5,7 +5,7 @@ import javafx.stage.Stage;
 
 public class VoiceConference extends Application {
     
-    private static GUILaunch guiLaunch;
+    public static GUILaunch guiLaunch;
     
     @Override
     public void start(Stage stage) throws Exception {

@@ -20,7 +20,7 @@ public class UDPClient {
         } catch (UnknownHostException ex) {
             System.out.println("This host is unknown.");
         }catch(SocketException ex1){
-            System.out.println("This socket cannot be created.");
+            System.out.println("This socket is busy");
         }
     }
     

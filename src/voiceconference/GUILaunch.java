@@ -22,12 +22,15 @@ class GUILaunch {
     
     private Text title;
     private TextField connectToIP;
+    private Label incomingIP;
     private RadioButton receiverRadio;
     private RadioButton senderRadio;
     private Button callBtn;
+    private Button acceptBtn;
     private Scene scene;
     
     private String hostIP;
+    public static boolean isAccept=false;
     
     private static UDPClient client;
     private UDPServer server;
@@ -96,15 +99,30 @@ class GUILaunch {
         senderRadio.setFont(Font.font(null,FontWeight.MEDIUM,20));
         senderRadio.setTextFill(Color.WHITE);
         
+        incomingIP = new Label("Waiting for incoming call ...");
+        incomingIP.setFont(Font.font(null,FontWeight.BOLD,20));
+        incomingIP.setTextFill(Color.WHITE);
+        
+        HBox buttonBox = new HBox();
+        buttonBox.setSpacing(15);
+        buttonBox.setPadding(new Insets(15, 15, 15, 0));
+        
         callBtn = new Button("Connect");
         callBtn.setFont(Font.font(null,FontWeight.MEDIUM,20));
         callBtn.setTextFill(Color.WHITE);
         callBtn.setStyle("-fx-background-color: green;");
         
+        acceptBtn= new Button("Accept");
+        acceptBtn.setFont(Font.font(null,FontWeight.MEDIUM,20));
+        acceptBtn.setTextFill(Color.WHITE);
+        acceptBtn.setStyle("-fx-background-color: green;");
+        acceptBtn.setVisible(false);
+        
         chooseBox.getChildren().addAll(receiverRadio,senderRadio);
-       
+        buttonBox.getChildren().addAll(callBtn,acceptBtn);
+        
         leftBar.setAlignment(Pos.CENTER_LEFT);
-        leftBar.getChildren().addAll(ipLabel,connectToIP,chooseBox,callBtn);
+        leftBar.getChildren().addAll(ipLabel,connectToIP,chooseBox,incomingIP,buttonBox);
      
         return leftBar; 
     }
@@ -118,6 +136,12 @@ class GUILaunch {
                 System.out.println("IP is not valid . Enter a new IP");
             }
         });
+
+        acceptBtn.setOnAction(ActionEvent->{
+            isAccept=true;
+            client = new UDPClient(hostIP);
+            audioService.captureVoice(client);
+        });
     }
     
     public void startServer(){
@@ -125,12 +149,17 @@ class GUILaunch {
         audioService = new RecordPlayback();
         server.receptionHandler(audioService);
     }
-
-    private boolean isValidIP() {
+    
+    public boolean isValidIP() {
         hostIP = connectToIP.getText();
-        if(hostIP.equals(""))
-            return false;
-        else
-            return true;
+        String PATTERN = "^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)$";
+        return hostIP.matches(PATTERN);
+    }
+    
+    public void informIncoming(String ipaddress){
+        acceptBtn.setVisible(true);
+        callBtn.setVisible(false);
+        incomingIP.setText("Incoming call from IP : "+ipaddress);
+        hostIP=ipaddress;
     }
 }
