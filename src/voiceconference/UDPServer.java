@@ -55,6 +55,7 @@ public class UDPServer extends Thread{
 
         while(!GUILaunch.isAccept);
 
+        System.out.println("packet listener on.");
         while(true){
 
             try{
@@ -84,6 +85,5 @@ public class UDPServer extends Thread{
         }
         
     }
-
 }
 

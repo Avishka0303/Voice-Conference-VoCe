@@ -14,8 +14,9 @@ public class VoiceConference extends Application {
         stage.setScene(guiLaunch.getScene());
         stage.setResizable(false);
         stage.show();
-        guiLaunch.startServer();
         guiLaunch.startService();
+        guiLaunch.startServer();
+        
     }
 
     public static void main(String[] args) {
