@@ -1,6 +1,8 @@
 package voiceconference;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 
@@ -18,11 +20,11 @@ public class MulticastServer {
             
             this.audioService = playback;
             
-            buffer = new byte[ProgramData.PACKET_SIZE];
+            buffer = new byte[ProgramData.PACKET_SIZE *4 ];
             //initiaize the multicast Socket.
             multicastSocket = new MulticastSocket(ProgramData.MUL_PORT_NUMBER);
             //create the datagram packet
-            datagramPacket = new DatagramPacket(new byte[ProgramData.PACKET_SIZE], ProgramData.PACKET_SIZE);
+            datagramPacket = new DatagramPacket(buffer, ProgramData.PACKET_SIZE *4 );
             
         }catch (IOException ex1){
             System.out.println("IO Exception has been generate");
@@ -35,11 +37,22 @@ public class MulticastServer {
         while(true){
             
             try{
+                
                 multicastSocket.receive(datagramPacket);
-                datagramPacket.setData(buffer);
+                //--------------------- Deseriaize the object --------------------------------
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
+                ObjectInputStream inputObject = new ObjectInputStream(inputStream);
+                DataPacket packet = (DataPacket)inputObject.readObject();
+
+                System.out.println("Packet index "+packet.packetNo);
+                
+                //--------------------- Send to audio output  --------------------------------
                 audioService.playVoice(buffer);
+                
             }catch(IOException ex){
                 System.out.println("Error in multicast recieve.");
+            }catch(ClassNotFoundException ex1){
+                System.out.println("Error in read object");
             }
             
         }
