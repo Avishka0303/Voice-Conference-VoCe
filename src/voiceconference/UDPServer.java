@@ -6,8 +6,6 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class UDPServer extends Thread{
     
