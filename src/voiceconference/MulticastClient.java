@@ -1,6 +1,8 @@
 package voiceconference;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
@@ -11,6 +13,7 @@ public class MulticastClient {
     private InetAddress multicastAddress;
     private RecordPlayback audioService;
     private byte[] buffer;
+    private int packetCount;
     
     public static boolean multicastOnline = true ;
     
@@ -28,11 +31,22 @@ public class MulticastClient {
     }
     
     public void sendDataPacket(byte[] data){ 
+        
         try {
+            
+            DataPacket packet = new DataPacket( (packetCount++% 8) ,data );
+            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+            ObjectOutputStream outputObject = new ObjectOutputStream(byteOutput);
+            outputObject.writeObject(packet);
+            outputObject.flush();
+            
             DatagramPacket dataPacket = new DatagramPacket(data,data.length,multicastAddress,ProgramData.MUL_PORT_NUMBER);
             multicastSocket.send(dataPacket);
+            
         } catch (IOException ex) {
+            
             System.out.println("Error in multicast packet sending.");
+            
         }
     }
     
