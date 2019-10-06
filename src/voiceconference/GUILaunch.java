@@ -1,5 +1,7 @@
 package voiceconference;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -7,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -23,8 +26,9 @@ class GUILaunch {
     private Text title;
     private TextField connectToIP;
     private static Label incomingIP;
-    private RadioButton receiverRadio;
-    private RadioButton senderRadio;
+    private RadioButton peer2peer;
+    private RadioButton multipeer;
+    private ToggleGroup cgroup; 
     private static Button callBtn;
     private static Button acceptBtn;
     private Scene scene;
@@ -81,24 +85,27 @@ class GUILaunch {
         connectToIP = new TextField();
         connectToIP.setPromptText("Enter reciever ip");
         connectToIP.setFont(Font.font(null,FontWeight.MEDIUM,20));
+        connectToIP.setEditable(false);
         
         HBox chooseBox = new HBox();
         chooseBox.setSpacing(15);
         chooseBox.setPadding(new Insets(15, 15, 15, 0));
         
-        ToggleGroup chooseToggle = new ToggleGroup();
+        cgroup = new ToggleGroup();
         
-        receiverRadio =new RadioButton("2 peers");
-        receiverRadio.setFont(Font.font(null,FontWeight.MEDIUM,20));
-        receiverRadio.setTextFill(Color.WHITE);
-        receiverRadio.setSelected(true);
-        receiverRadio.setToggleGroup(chooseToggle);
+        peer2peer =new RadioButton("2 peers");
+        peer2peer.setFont(Font.font(null,FontWeight.MEDIUM,20));
+        peer2peer.setTextFill(Color.WHITE);
+        peer2peer.setUserData("A");
+        peer2peer.setToggleGroup(cgroup);
         
-        senderRadio = new RadioButton("Multicast");
-        senderRadio.setToggleGroup(chooseToggle);
-        senderRadio.setFont(Font.font(null,FontWeight.MEDIUM,20));
-        senderRadio.setTextFill(Color.WHITE);
         
+        multipeer = new RadioButton("Multicast");
+        multipeer.setToggleGroup(cgroup);
+        multipeer.setFont(Font.font(null,FontWeight.MEDIUM,20));
+        multipeer.setUserData("B");
+        multipeer.setTextFill(Color.WHITE);
+
         incomingIP = new Label("Waiting for incoming call ...");
         incomingIP.setFont(Font.font(null,FontWeight.BOLD,20));
         incomingIP.setTextFill(Color.WHITE);
@@ -111,6 +118,7 @@ class GUILaunch {
         callBtn.setFont(Font.font(null,FontWeight.MEDIUM,20));
         callBtn.setTextFill(Color.WHITE);
         callBtn.setStyle("-fx-background-color: green;");
+        callBtn.setVisible(false);
         
         acceptBtn= new Button("Accept");
         acceptBtn.setFont(Font.font(null,FontWeight.MEDIUM,20));
@@ -118,8 +126,9 @@ class GUILaunch {
         acceptBtn.setStyle("-fx-background-color: green;");
         acceptBtn.setVisible(false);
         
-        chooseBox.getChildren().addAll(receiverRadio,senderRadio);
+        chooseBox.getChildren().addAll(peer2peer,multipeer);
         buttonBox.getChildren().addAll(callBtn,acceptBtn);
+        buttonBox.setVisible(false);
         
         leftBar.setAlignment(Pos.CENTER_LEFT);
         leftBar.getChildren().addAll(chooseBox,ipLabel,connectToIP,incomingIP,buttonBox);
@@ -128,6 +137,7 @@ class GUILaunch {
     }
 
     void startService() {
+        
         callBtn.setOnAction(ActionEvent->{
             if( isValidIP()){
                 client = new UDPClient(hostIP);
@@ -143,6 +153,17 @@ class GUILaunch {
             isAccept=true;
         });
         
+        cgroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if(cgroup.getSelectedToggle()!=null){
+                    connectToIP.setEditable(true);
+                    callBtn.setVisible(true);
+                    System.out.println(cgroup.getSelectedToggle().getUserData().toString());
+                }
+            }
+        });
+
     }
     
     public void startServer(){
