@@ -160,7 +160,7 @@ class GUILaunch {
     public static void informIncoming(String ipaddress){
         acceptBtn.setVisible(true);
         callBtn.setVisible(false);
-        incomingIP.setText("Incoming call from IP : "+ipaddress);
+        //incomingIP.setText("Incoming call from IP : "+ipaddress);
         hostIP=ipaddress;
     }
     
