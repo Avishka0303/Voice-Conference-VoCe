@@ -30,7 +30,7 @@ public class UDPClient {
         
         try{
 
-            DataPacket packet = new DataPacket((packetSequence++%16),data);
+            DataPacket packet = new DataPacket((packetSequence++ % 8 ),data);
             ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
             ObjectOutputStream outputObject = new ObjectOutputStream(byteOutput);
             outputObject.writeObject(packet);

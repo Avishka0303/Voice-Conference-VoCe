@@ -15,6 +15,7 @@ public class UDPServer extends Thread{
     
     private byte[] buffer;
     
+    private byte reArrangeBuffer[][]; 
     
     public UDPServer(RecordPlayback playback){
         
@@ -24,6 +25,9 @@ public class UDPServer extends Thread{
             
             //buffer for read input data
             buffer = new byte[ProgramData.PACKET_SIZE * 4];
+            
+            //buffer for rearranging the packets
+            this.reArrangeBuffer = new byte[ProgramData.MEM_SIZE][ProgramData.PACKET_SIZE];
             
             //construct the socket.
             datagramSocket = new DatagramSocket(ProgramData.PORT_NUMBER);
@@ -64,7 +68,7 @@ public class UDPServer extends Thread{
                 ObjectInputStream inputObject = new ObjectInputStream(inputStream);
                 DataPacket packet = (DataPacket)inputObject.readObject();
 
-                System.out.println("Packet seq "+packet.packetNo);
+                System.out.println("Packet index "+packet.packetNo);
 
                 //--------------------- Send to audio output  --------------------------------
                 audioService.playVoice(buffer);
