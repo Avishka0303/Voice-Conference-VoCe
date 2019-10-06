@@ -2,7 +2,6 @@ package voiceconference;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -24,13 +23,13 @@ public class UDPServer extends Thread{
             this.audioService = playback;
             
             //buffer for read input data
-            buffer = new byte[ProgramData.PACKET_SIZE];
+            buffer = new byte[ProgramData.PACKET_SIZE * 4];
             
             //construct the socket.
             datagramSocket = new DatagramSocket(ProgramData.PORT_NUMBER);
            
             //create the datagram packet
-            datagramPacket = new DatagramPacket(new byte[ProgramData.PACKET_SIZE], ProgramData.PACKET_SIZE);
+            datagramPacket = new DatagramPacket( buffer , ProgramData.PACKET_SIZE * 4 );
             
         } catch (IOException ex1) {
             System.out.println("Socket is used by another program.");
@@ -59,14 +58,11 @@ public class UDPServer extends Thread{
                 //-------------------- Recieve byte array from datagram socket --------------
                 datagramSocket.receive(datagramPacket);    
                 System.out.println("Call from IP address : "+datagramPacket.getAddress()+" ");
-                datagramPacket.setData(buffer);
 
                 //--------------------- Deseriaize the object --------------------------------
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
                 ObjectInputStream inputObject = new ObjectInputStream(inputStream);
-                
-                Object object = inputObject.readObject();
-                DataPacket packet = (DataPacket)object;
+                DataPacket packet = (DataPacket)inputObject.readObject();
 
                 System.out.println("Packet seq "+packet.packetNo);
 
