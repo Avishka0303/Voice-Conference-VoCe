@@ -22,5 +22,4 @@ public class VoiceConference extends Application {
         guiLaunch = new GUILaunch();
         launch(args);
     }   
-    
 }
