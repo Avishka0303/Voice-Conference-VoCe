@@ -2,7 +2,6 @@ package voiceconference;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -31,15 +30,13 @@ public class UDPClient {
         
         try{
 
-            DataPacket packet = new DataPacket(packetSequence++,data);
+            DataPacket packet = new DataPacket((packetSequence++%16),data);
             ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-            ObjectOutput outputObject = new ObjectOutputStream(byteOutput);
+            ObjectOutputStream outputObject = new ObjectOutputStream(byteOutput);
             outputObject.writeObject(packet);
             outputObject.flush();
-            outputObject.close();
             
             byte[] objectData = byteOutput.toByteArray();
-            
             DatagramPacket dataPacket = new DatagramPacket(objectData , objectData.length , hostAddress  ,ProgramData.PORT_NUMBER);
             
             try{
