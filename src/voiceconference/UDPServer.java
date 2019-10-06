@@ -14,6 +14,7 @@ public class UDPServer extends Thread{
     private RecordPlayback audioService;
     
     private byte[] buffer;
+    public static boolean isOnline = true;
     
     private byte reArrangeBuffer[][]; 
     
@@ -55,7 +56,7 @@ public class UDPServer extends Thread{
             ex.printStackTrace();
         }
         
-        while(true){
+        while(isOnline){
 
             try{
 
@@ -65,8 +66,8 @@ public class UDPServer extends Thread{
 
                 //--------------------- Deseriaize the object --------------------------------
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
-                ObjectInputStream inputObject = new ObjectInputStream(inputStream);
-                DataPacket packet = (DataPacket)inputObject.readObject();
+                ObjectInputStream objectStream = new ObjectInputStream(inputStream);
+                DataPacket packet = (DataPacket)objectStream.readObject();
 
                 System.out.println("Packet index "+packet.packetNo);
 
@@ -77,12 +78,12 @@ public class UDPServer extends Thread{
                 System.out.println("Error in reception check for that.");
                 e.printStackTrace();
             }catch(ClassNotFoundException ex){
-                System.out.println("Error in deserialization part.");
+                System.out.println("Error in deserialization.");
                 ex.printStackTrace();
             }
             
         }
-        
+        datagramSocket.close();
     }
 }
 
