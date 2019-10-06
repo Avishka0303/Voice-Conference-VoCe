@@ -67,6 +67,7 @@ public class UDPServer extends Thread{
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
                 ObjectInput inputObject = null;
                 inputObject = new ObjectInputStream(inputStream);
+                
                 DataPacket packet = (DataPacket)inputObject.readObject();
 
                 System.out.println("Packet seq "+packet.packetNo);
@@ -76,8 +77,10 @@ public class UDPServer extends Thread{
 
             }catch(IOException e){
                 System.out.println("Error in reception check for that.");
+                e.printStackTrace();
             }catch(ClassNotFoundException ex){
                 System.out.println("Error in deserialization part.");
+                ex.printStackTrace();
             }
             
         }

@@ -27,23 +27,30 @@ public class UDPClient {
         }
     }
     
-    public void UDPSendPacket(byte[] data) throws IOException{
+    public void UDPSendPacket(byte[] data){
         
-        DataPacket packet = new DataPacket(packetSequence++,data);
-        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-        ObjectOutput outputObject = null;
-        
-        outputObject = new ObjectOutputStream(byteOutput);
-        outputObject.writeObject(packet);
-        outputObject.flush();
-        
-        byte[] objectData = byteOutput.toByteArray();
-        
-        DatagramPacket dataPacket = new DatagramPacket(objectData , objectData.length , hostAddress,ProgramData.PORT_NUMBER);
         try{
-            udpSocket.send(dataPacket);
+
+            DataPacket packet = new DataPacket(packetSequence++,data);
+            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+            ObjectOutput outputObject = null;
+            
+            outputObject = new ObjectOutputStream(byteOutput);
+            outputObject.writeObject(packet);
+            outputObject.flush();
+            
+            byte[] objectData = byteOutput.toByteArray();
+            
+            DatagramPacket dataPacket = new DatagramPacket(objectData , objectData.length , hostAddress  ,ProgramData.PORT_NUMBER);
+            
+            try{
+                udpSocket.send(dataPacket);
+            }catch(IOException ex){
+                System.out.println("Error in packet sending protocol.");
+            }
+            
         }catch(IOException ex){
-            System.out.println("Error in packet sending protocol.");
+            System.out.println("Error in serialization.");
         }
         
     }
