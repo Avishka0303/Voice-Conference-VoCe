@@ -33,11 +33,10 @@ public class UDPClient {
 
             DataPacket packet = new DataPacket(packetSequence++,data);
             ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-            ObjectOutput outputObject = null;
-            
-            outputObject = new ObjectOutputStream(byteOutput);
+            ObjectOutput outputObject = new ObjectOutputStream(byteOutput);
             outputObject.writeObject(packet);
             outputObject.flush();
+            outputObject.close();
             
             byte[] objectData = byteOutput.toByteArray();
             
