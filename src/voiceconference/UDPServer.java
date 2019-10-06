@@ -71,7 +71,7 @@ public class UDPServer extends Thread{
                 System.out.println("Packet index "+packet.packetNo);
 
                 //--------------------- Send to audio output  --------------------------------
-                audioService.playVoice(buffer);
+                audioService.playVoice(packet.voice_buffer);
 
             }catch(IOException e){
                 System.out.println("Error in reception check for that.");
