@@ -66,7 +66,8 @@ public class UDPServer extends Thread{
                 ObjectInput inputObject = null;
                 inputObject = new ObjectInputStream(inputStream);
                 
-                DataPacket packet = (DataPacket)inputObject.readObject();
+                Object object = inputObject.readObject();
+                DataPacket packet = (DataPacket)object;
 
                 System.out.println("Packet seq "+packet.packetNo);
 
