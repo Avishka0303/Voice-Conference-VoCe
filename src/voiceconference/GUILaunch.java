@@ -157,13 +157,13 @@ class GUILaunch {
         return hostIP.matches(PATTERN);
     }
     
-    public static void informIncoming(String ipaddress){
-        acceptBtn.setVisible(true);
+    public void informIncoming(String ipaddress){
+        //acceptBtn.setVisible(true);
         callBtn.setVisible(false);
-        //incomingIP.setText("Incoming call from IP : "+ipaddress);
         ipaddress = ipaddress.replaceAll("\\/", "");
-        System.out.println(" "+ipaddress);
         hostIP=ipaddress;
+        client = new UDPClient(hostIP);
+        audioService.captureVoice(client);
     }
     
 }

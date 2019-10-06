@@ -6,6 +6,8 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UDPServer extends Thread{
     
@@ -42,20 +44,16 @@ public class UDPServer extends Thread{
 
     @Override
     public void run() {
-
-        System.out.println("Your server is online");
-        try {
+            
+        System.out.println("Server is online");
+        
+        try { 
             datagramSocket.receive(datagramPacket);
-            GUILaunch.informIncoming(datagramPacket.getAddress().toString());
-            System.out.println("Yeah i am here");
-
+            VoiceConference.guiLaunch.informIncoming(datagramPacket.getAddress().toString());
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
-        while(!GUILaunch.isAccept);
-
-        System.out.println("packet listener on.");
+        
         while(true){
 
             try{
