@@ -13,7 +13,7 @@ public class UDPClient {
     
     private InetAddress hostAddress;
     private DatagramSocket udpSocket;
-    private int packetSequence;
+    private int packetCount;
     
     public UDPClient(String peerIPAddress){
         try {
@@ -29,8 +29,9 @@ public class UDPClient {
     public void UDPSendPacket(byte[] data){
         
         try{
-
-            DataPacket packet = new DataPacket((packetSequence++ % 8 ),data);
+            
+            if(packetCount==20) packetCount=0;
+            DataPacket packet = new DataPacket((packetCount++),data);
             ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
             ObjectOutputStream outputObject = new ObjectOutputStream(byteOutput);
             outputObject.writeObject(packet);
