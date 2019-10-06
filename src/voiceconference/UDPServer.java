@@ -63,8 +63,7 @@ public class UDPServer extends Thread{
 
                 //--------------------- Deseriaize the object --------------------------------
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
-                ObjectInput inputObject = null;
-                inputObject = new ObjectInputStream(inputStream);
+                ObjectInputStream inputObject = new ObjectInputStream(inputStream);
                 
                 Object object = inputObject.readObject();
                 DataPacket packet = (DataPacket)object;
