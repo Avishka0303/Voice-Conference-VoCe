@@ -138,9 +138,9 @@ class GUILaunch {
         });
 
         acceptBtn.setOnAction(ActionEvent->{
-            isAccept=true;
             client = new UDPClient(hostIP);
             audioService.captureVoice(client);
+            isAccept=true;
         });
         
     }
