@@ -76,7 +76,7 @@ public class RecordPlayback {
     }
 
     public void captureVoice(UDPClient client) {
-        byteArrayOutputStream = new ByteArrayOutputStream();
+        //byteArrayOutputStream = new ByteArrayOutputStream();
         Thread recordingThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -87,9 +87,8 @@ public class RecordPlayback {
                     while (!stopCapture) {
                         readCount = targetDataLine.read(tempBuffer, 0, tempBuffer.length);  //capture sound into tempBuffer
                         if (readCount > 0) {
-                            byteArrayOutputStream.write(tempBuffer, 0, readCount);
+                            //byteArrayOutputStream.write(tempBuffer, 0, readCount);
                             client.UDPSendPacket(tempBuffer);
-                            //sourceDataLine.write( tempBuffer, 0, 500 );   //playing audio available in tempBuffer
                         }
                     }
                     byteArrayOutputStream.close();
