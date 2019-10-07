@@ -56,12 +56,18 @@ public class UDPServer extends Thread{
             ex.printStackTrace();
         }
         
+        long startTime = System.currentTimeMillis();
+        long endTime = 0 ;
+        long packetCount=0;
+        
         while(isOnline){
 
             try{
 
                 //-------------------- Recieve byte array from datagram socket --------------
                 datagramSocket.receive(datagramPacket);    
+                packetCount++;
+                
                 System.out.println("Call from IP address : "+datagramPacket.getAddress()+" ");
 
                 //--------------------- Deseriaize the object --------------------------------
@@ -73,7 +79,13 @@ public class UDPServer extends Thread{
 
                 //--------------------- Send to audio output  --------------------------------
                 audioService.playVoice(packet.voice_buffer);
-
+                
+                endTime = System.currentTimeMillis();
+                if((endTime-startTime)>= 60000 ){
+                    startTime = System.currentTimeMillis();
+                    System.out.println("received packet count : "+packetCount );
+                }
+                
             }catch(IOException e){
                 System.out.println("Error in reception check for that.");
                 e.printStackTrace();
