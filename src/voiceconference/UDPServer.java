@@ -59,6 +59,8 @@ public class UDPServer extends Thread{
         long startTime = System.currentTimeMillis();
         long endTime = 0 ;
         long packetCount=0;
+        int packetNo=0;
+        int packetLossCount=0;
         
         while(isOnline){
 
@@ -74,16 +76,24 @@ public class UDPServer extends Thread{
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
                 ObjectInputStream objectStream = new ObjectInputStream(inputStream);
                 DataPacket packet = (DataPacket)objectStream.readObject();
-
-                System.out.println("Packet index "+packet.packetNo);
+                
+                System.out.println( "Packet has to arrived : " + packetNo+" arrived packet : "+packet.packetNo);
+                packetNo = packet.packetNo;
+                
+//                if(reArrangeBuffer[packetNo%ProgramData.MEM_SIZE]==null)
+//                    reArrangeBuffer[packetNo%ProgramData.MEM_SIZE] = packet.voice_buffer;
+                    
 
                 //--------------------- Send to audio output  --------------------------------
                 audioService.playVoice(packet.voice_buffer);
                 
                 endTime = System.currentTimeMillis();
-                if((endTime-startTime)>= 60000 ){
+                
+                
+                if( (endTime-startTime) >= 60000 ){
                     startTime = System.currentTimeMillis();
                     System.out.println("received packet count : "+packetCount );
+                    packetCount = 0 ;
                 }
                 
             }catch(IOException e){
