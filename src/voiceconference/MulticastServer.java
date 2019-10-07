@@ -38,7 +38,9 @@ public class MulticastServer {
             
             try{
                 
+                //--------------------- Recieve the data packet-------------------------------
                 multicastSocket.receive(datagramPacket);
+                
                 //--------------------- Deseriaize the object --------------------------------
                 ByteArrayInputStream inputStream = new ByteArrayInputStream(buffer);
                 ObjectInputStream inputObject = new ObjectInputStream(inputStream);
