@@ -30,7 +30,8 @@ public class UDPClient {
         
         try{
             
-            if(packetCount==20) packetCount=0;
+            if(packetCount==100) packetCount=0;
+            
             DataPacket packet = new DataPacket((packetCount++),data);
             ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
             ObjectOutputStream outputObject = new ObjectOutputStream(byteOutput);
