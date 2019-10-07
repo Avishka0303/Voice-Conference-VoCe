@@ -118,7 +118,6 @@ class GUILaunch {
         callBtn.setFont(Font.font(null,FontWeight.MEDIUM,20));
         callBtn.setTextFill(Color.WHITE);
         callBtn.setStyle("-fx-background-color: green;");
-        callBtn.setVisible(false);
         
         acceptBtn= new Button("Accept");
         acceptBtn.setFont(Font.font(null,FontWeight.MEDIUM,20));
@@ -128,7 +127,6 @@ class GUILaunch {
         
         chooseBox.getChildren().addAll(peer2peer,multipeer);
         buttonBox.getChildren().addAll(callBtn,acceptBtn);
-        buttonBox.setVisible(false);
         
         leftBar.setAlignment(Pos.CENTER_LEFT);
         leftBar.getChildren().addAll(chooseBox,ipLabel,connectToIP,incomingIP,buttonBox);
@@ -158,7 +156,6 @@ class GUILaunch {
             public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
                 if(cgroup.getSelectedToggle()!=null){
                     connectToIP.setEditable(true);
-                    callBtn.setVisible(true);
                     System.out.println(cgroup.getSelectedToggle().getUserData().toString());
                 }
             }
@@ -179,8 +176,6 @@ class GUILaunch {
     }
     
     public void informIncoming(String ipaddress){
-        //acceptBtn.setVisible(true);
-        callBtn.setVisible(false);
         ipaddress = ipaddress.replaceAll("\\/", "");
         hostIP=ipaddress;
         client = new UDPClient(hostIP);
